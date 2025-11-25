@@ -30,7 +30,7 @@ jobs:
     # We inject the secrets using --env-var flags so they are never saved in a file
     - name: Run Trello API Tests
       run: |
-        newman run "TrelloV4 API.postman_collection.json" \
+        newman run "Trello API.postman_collection.json" \
         --env-var "trelloKey=${{ secrets.TRELLO_KEY }}" \
         --env-var "trelloToken=${{ secrets.TRELLO_TOKEN }}" \
         --env-var "BaseURL=https://api.trello.com/1/" \
