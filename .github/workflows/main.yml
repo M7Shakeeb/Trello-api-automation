@@ -1,0 +1,37 @@
+name: Trello API Automated Tests
+
+# Trigger: Run this whenever code is pushed to the 'main' branch
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  run-newman-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+    # 1. Check out the code from the repository
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    # 2. Install Node.js (needed to run Newman)
+    - name: Install Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+    # 3. Install Newman
+    - name: Install Newman
+      run: npm install -g newman
+
+    # 4. Run the Postman Collection
+    # We inject the secrets using --env-var flags so they are never saved in a file
+    - name: Run Trello API Tests
+      run: |
+        newman run "TrelloV4 API.postman_collection.json" \
+        --env-var "trelloKey=${{ secrets.TRELLO_KEY }}" \
+        --env-var "trelloToken=${{ secrets.TRELLO_TOKEN }}" \
+        --env-var "BaseURL=https://api.trello.com/1/" \
+        --reporters cli
