@@ -3,6 +3,7 @@
 ![Postman](https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
 ![Trello](https://img.shields.io/badge/Trello-0052CC?style=for-the-badge&logo=trello&logoColor=white)
+[![Trello API Automated Tests](https://github.com/M7Shakeeb/Trello-api-automation/actions/workflows/main.yml/badge.svg)](https://github.com/M7Shakeeb/Trello-api-automation/actions/workflows/main.yml)
 
 ## 📄 Project Overview
 This repository contains a robust automated test suite for the **Trello REST API**. Unlike simple happy-path testing, this framework is designed to handle **dynamic data**, **stateful workflows**, and **negative test scenarios**.
