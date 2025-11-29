@@ -56,6 +56,8 @@ The automation script simulates a real user performing a complete project lifecy
 
 ## 🚀 How to Run Locally
 
+### Option 1: Run Via Postman Collection Runner
+
 ### Prerequisites
 * [Postman](https://www.postman.com/downloads/) installed.
 * A Trello Account (to generate API Key & Token).
@@ -77,6 +79,29 @@ The automation script simulates a real user performing a complete project lifecy
     * Select the collection and click **Run**.
     * Watch the tests execute sequentially!
 
+### Option 2: Run via Command Line (Newman)
+If you prefer the terminal or want to test the CI/CD command locally:
+
+1.  **Prerequisites:** Ensure [Node.js](https://nodejs.org/) is installed.
+2.  **Install Newman:**
+    ```bash
+    npm install -g newman
+    ```
+3.  **Run the Collection:**
+
+    **For Mac/Linux (Bash):**
+    ```bash
+    newman run "Trello API.postman_collection.json" \
+      --env-var "trelloKey=INSERT_YOUR_KEY" \
+      --env-var "trelloToken=INSERT_YOUR_TOKEN" \
+      --env-var "BaseURL=[https://api.trello.com/1/](https://api.trello.com/1/)" \
+      --reporters cli
+    ```
+
+    **For Windows (PowerShell):**
+    ```powershell
+    newman run "Trello API.postman_collection.json" --env-var "trelloKey=INSERT_YOUR_KEY" --env-var "trelloToken=INSERT_YOUR_TOKEN" --env-var "BaseURL=[https://api.trello.com/1/](https://api.trello.com/1/)" --reporters cli
+    ```
 ---
 
 ## 📂 Project Structure
