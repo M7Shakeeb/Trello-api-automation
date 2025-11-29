@@ -44,7 +44,7 @@ The automation script simulates a real user performing a complete project lifecy
 2.  **Validation (GET Board):**
     * *The "Why":* Verifies the board was actually created on the server and that default permission levels (Private) are correct.
 3.  **Workflow Setup (POST Lists):**
-    * *The "Why":* WE now introduce lists into this board. We create "To-Do" and "Done" columns to prepare for task management.
+    * *The "Why":* We now introduce lists into this board. We create "To-Do" and "Done" columns to prepare for task management.
 4.  **Task Creation (POST Card):**
     * *The "Why":* Simulates a user adding a task ("Sign Up for Trello") to the "To-Do" column.
 5.  **Task Completion (PUT Card):**
