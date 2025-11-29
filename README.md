@@ -110,7 +110,7 @@ trello-api-automation/
 ├── .github/workflows/main.yml    # The CI/CD Pipeline Configuration
 ├── Trello API.postman_collection.json  # The Main Test Script
 └── README.md                     # Documentation
-
+```
 ## 👨‍💻 Author
 **Shakeeb Mohammed**
 * QA & Test Automation Engineer
