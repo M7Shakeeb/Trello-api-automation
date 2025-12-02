@@ -681,6 +681,274 @@
 							"response": []
 						}
 					]
+				},
+				{
+					"name": "Invalid List",
+					"item": [
+						{
+							"name": "Create a Card",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Creating card in a list that doesnt exist returns 404\", () => {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"console.clear();"
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{BaseURL}}cards?idList=6925fddfa114032234805bac&key={{trelloKey}}&token={{trelloToken}}&name=Ghost Card",
+									"host": [
+										"{{BaseURL}}cards"
+									],
+									"query": [
+										{
+											"key": "idList",
+											"value": "6925fddfa114032234805bac"
+										},
+										{
+											"key": "key",
+											"value": "{{trelloKey}}"
+										},
+										{
+											"key": "token",
+											"value": "{{trelloToken}}"
+										},
+										{
+											"key": "name",
+											"value": "Ghost Card"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "State Violation - Closed Board",
+					"item": [
+						{
+							"name": "Create board",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const response = pm.response.json();\r",
+											"pm.collectionVariables.set(\"zombieBoardId\", response.id);\r",
+											"pm.test(\"Setup board created\", () => pm.response.to.have.status(200));\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"// Create a random name and save it\r",
+											"const randomName = \"Trello Board \" + Math.floor(Math.random() * 900 + 100);\r",
+											"pm.collectionVariables.set(\"currentBoardName\", randomName);\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{BaseURL}}boards?name=Zombie Board&key={{trelloKey}}&token={{trelloToken}}",
+									"host": [
+										"{{BaseURL}}boards"
+									],
+									"query": [
+										{
+											"key": "name",
+											"value": "Zombie Board"
+										},
+										{
+											"key": "key",
+											"value": "{{trelloKey}}"
+										},
+										{
+											"key": "token",
+											"value": "{{trelloToken}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Close the Board(Archive)",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Board is closed\", () => pm.response.to.have.status(200));"
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "{{BaseURL}}boards/{{zombieBoardId}}?key={{trelloKey}}&token={{trelloToken}}&closed=true",
+									"host": [
+										"{{BaseURL}}boards"
+									],
+									"path": [
+										"{{zombieBoardId}}"
+									],
+									"query": [
+										{
+											"key": "key",
+											"value": "{{trelloKey}}"
+										},
+										{
+											"key": "token",
+											"value": "{{trelloToken}}"
+										},
+										{
+											"key": "closed",
+											"value": "true"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add List to Closed Board",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Cannot add list to a closed board (conflict)\", () => {\r",
+											"    pm.response.to.have.status(409); \r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{BaseURL}}lists?name=Illegal List&idBoard={{zombieBoardId}}&key={{trelloKey}}&token={{trelloToken}}",
+									"host": [
+										"{{BaseURL}}lists"
+									],
+									"query": [
+										{
+											"key": "name",
+											"value": "Illegal List"
+										},
+										{
+											"key": "idBoard",
+											"value": "{{zombieBoardId}}"
+										},
+										{
+											"key": "key",
+											"value": "{{trelloKey}}"
+										},
+										{
+											"key": "token",
+											"value": "{{trelloToken}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Zombie Board",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Zombie board deleted\", () => pm.response.to.have.status(200));"
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{BaseURL}}boards/{{zombieBoardId}}?key={{trelloKey}}&token={{trelloToken}}",
+									"host": [
+										"{{BaseURL}}boards"
+									],
+									"path": [
+										"{{zombieBoardId}}"
+									],
+									"query": [
+										{
+											"key": "key",
+											"value": "{{trelloKey}}"
+										},
+										{
+											"key": "token",
+											"value": "{{trelloToken}}"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
 				}
 			]
 		}
@@ -746,6 +1014,10 @@
 		},
 		{
 			"key": "cardName",
+			"value": ""
+		},
+		{
+			"key": "zombieBoardId",
 			"value": ""
 		}
 	]

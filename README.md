@@ -1,4 +1,4 @@
-# Trello API Automation Framework
+# 🍌 Trello API Automation Framework
 
 ![Postman](https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
@@ -6,7 +6,7 @@
 [![Trello API Automated Tests](https://github.com/M7Shakeeb/Trello-api-automation/actions/workflows/main.yml/badge.svg)](https://github.com/M7Shakeeb/Trello-api-automation/actions/workflows/main.yml)
 
 ## 📄 Project Overview
-This repository contains a robust automated test suite for the **Trello REST API**. It does more than just happy-path testing, this framework is designed to handle **dynamic data**, **stateful workflows**, and **negative test scenarios**.
+This repository contains a robust automated test suite for the **Trello REST API**. It does more than just happy-path testing; this framework is designed to handle **dynamic data**, **stateful workflows**, and **deep negative test scenarios**.
 
 It simulates a realistic user journey: creating a board, managing lists, moving cards, and performing cleanup. These are all fully automated using Postman and JavaScript.
 
@@ -21,9 +21,9 @@ I made this collection while keeping in mind that I need to solve these common a
 * **Problem:** APIs return different IDs every time a resource is created.
 * **Solution:** The framework captures dynamic IDs (`boardId`, `listId`, `cardId`) from JSON responses and stores them as **Collection Variables**. These variables are automatically passed to subsequent requests, creating a seamless E2E workflow.
 
-### 3. 🔐 Security Best Practices
-* **Problem:** Hardcoding API Keys in test files leads to security leaks.
-* **Solution:** All authentication credentials (`trelloKey`, `trelloToken`) are extracted into **Postman Environments**, ensuring sensitive keys are never committed to version control.
+### 3. 📊 Visual Reporting
+* **Problem:** CI/CD logs are hard to read for non-technical stakeholders.
+* **Solution:** Integrated `newman-reporter-htmlextra` to generate detailed, color-coded HTML dashboards for every test run (accessible via GitHub Artifacts).
 
 ---
 
@@ -44,12 +44,16 @@ The automation script simulates a real user performing a complete project lifecy
 2.  **Validation (GET Board):**
     * *The "Why":* Verifies the board was actually created on the server and that default permission levels (Private) are correct.
 3.  **Workflow Setup (POST Lists):**
-    * *The "Why":* WE now introduce lists into this board. We create "To-Do" and "Done" columns to prepare for task management.
+    * *The "Why":* We now introduce lists into this board. We create "To-Do" and "Done" columns to prepare for task management.
 4.  **Task Creation (POST Card):**
     * *The "Why":* Simulates a user adding a task ("Sign Up for Trello") to the "To-Do" column.
 5.  **Task Completion (PUT Card):**
     * *The "Why":* Simulating a business logic, we move the card to the "Done" list and assert that its `idList` property has actually updated.
-6.  **Cleanup (DELETE Board):**
+6.  **Negative Testing (Invalid Auth & IDs):**
+    * *The "Why":* Verifies security and error handling. We ensure the API correctly rejects invalid tokens (401) and returns correct error codes (404) when trying to access resources that don't exist.
+7.  **State Violation Testing (The "Zombie Board"):**
+    * *The "Why":* Tests the **lifecycle logic** of the application. We Archive (close) a board and then attempt to add a list to it. The test passes only if the API *rejects* the request, proving that closed boards are effectively locked.
+8.  **Cleanup (DELETE Board):**
     * *The "Why":* Self-cleaning automation. We delete the specific board we created to prevent cluttering the environment (State Management).
 
 ---
@@ -65,7 +69,7 @@ The automation script simulates a real user performing a complete project lifecy
 ### Installation Steps
 1.  **Clone the Repository**
     ```bash
-    git clone [https://github.com/M7Shakeeb/Trello-api-automation.git](https://github.com/M7Shakeeb/Trello-api-automation.git)
+    git clone https://github.com/M7Shakeeb/Trello-api-automation.git
     ```
 2.  **Import to Postman**
     * Open Postman.
@@ -79,13 +83,13 @@ The automation script simulates a real user performing a complete project lifecy
     * Select the collection and click **Run**.
     * Watch the tests execute sequentially!
 
-### Option 2: Run via Command Line (Newman)
-If you prefer the terminal or want to test the CI/CD command locally:
+### Option 2: Run via Command Line (Newman + HTML Report)
+If you prefer the terminal or want to generate the HTML report locally:
 
 1.  **Prerequisites:** Ensure [Node.js](https://nodejs.org/) is installed.
-2.  **Install Newman:**
+2.  **Install Newman & Reporter:**
     ```bash
-    npm install -g newman
+    npm install -g newman newman-reporter-htmlextra
     ```
 3.  **Run the Collection:**
 
@@ -94,20 +98,23 @@ If you prefer the terminal or want to test the CI/CD command locally:
     newman run "Trello API.postman_collection.json" \
       --env-var "trelloKey=INSERT_YOUR_KEY" \
       --env-var "trelloToken=INSERT_YOUR_TOKEN" \
-      --env-var "BaseURL=[https://api.trello.com/1/](https://api.trello.com/1/)" \
-      --reporters cli
+      --env-var "BaseURL=https://api.trello.com/1/" \
+      --reporters "cli,htmlextra"
     ```
 
     **For Windows (PowerShell):**
     ```powershell
-    newman run "Trello API.postman_collection.json" --env-var "trelloKey=INSERT_YOUR_KEY" --env-var "trelloToken=INSERT_YOUR_TOKEN" --env-var "BaseURL=[https://api.trello.com/1/](https://api.trello.com/1/)" --reporters cli
+    newman run "Trello API.postman_collection.json" --env-var "trelloKey=INSERT_YOUR_KEY" --env-var "trelloToken=INSERT_YOUR_TOKEN" --env-var "BaseURL=https://api.trello.com/1/" --reporters "cli,htmlextra"
+
     ```
+    *(Note: The HTML report will be generated in the `./newman` folder)*
+
 ---
 
 ## 📂 Project Structure
 ```text
 trello-api-automation/
-├── .github/workflows/main.yml    # The CI/CD Pipeline Configuration
+├── .github/workflows/main.yml    # CI/CD & HTML Report Configuration
 ├── Trello API.postman_collection.json  # The Main Test Script
 └── README.md                     # Documentation
 ```
