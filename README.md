@@ -9,11 +9,6 @@
 A comprehensive automated regression suite for the Trello REST API, designed to validate CRUD operations, state management, and edge cases using Postman and JavaScript. 
 It simulates a realistic user journey: creating a board, managing lists, moving cards, and performing cleanup. These are all fully automated using Postman and JavaScript.
 
-**View Latest Results:**
-This project runs automatically on every code change. You can verify the latest regression status and access the generated HTML reports (click on the *latest run*, then click the *Artifacts* tab) by clicking the badge below:
-
-[![Trello API Automated Tests](https://github.com/M7Shakeeb/Trello-api-automation/actions/workflows/main.yml/badge.svg)](https://github.com/M7Shakeeb/Trello-api-automation/actions/workflows/main.yml)
-
 ## Tech Stack
 * **Core:** Postman, JavaScript (ES6)
 * **CLI Runner:** Newman
@@ -32,17 +27,18 @@ I made this collection while keeping in mind that I need to solve these common a
 * **Solution:** The framework captures dynamic IDs (`boardId`, `listId`, `cardId`) from JSON responses and stores them as **Collection Variables**. These variables are automatically passed to subsequent requests, creating a seamless E2E workflow.
 
 ### 3. Visual Reporting
-* **Problem:** CI/CD logs are hard to read for non-technical stakeholders.
-* **Solution:** Integrated `newman-reporter-htmlextra` to generate detailed, color-coded HTML dashboards for every test run (accessible via GitHub Artifacts).
+This project runs automatically on every code change. You can verify the latest regression status and access the generated HTML reports by clicking the badge below(click on the *latest run*, then click the *Artifacts* tab):
+
+[![Trello API Automated Tests](https://github.com/M7Shakeeb/Trello-api-automation/actions/workflows/main.yml/badge.svg)](https://github.com/M7Shakeeb/Trello-api-automation/actions/workflows/main.yml)
 
 ---
 
 ## CI/CD Pipeline (GitHub Actions)
-This project is not just a local script; it is integrated into a **Continuous Integration** pipeline.
+This project is integrated into a **Continuous Integration** pipeline.
 * **Tool:** [Newman](https://www.npmjs.com/package/newman) (Postman CLI).
 * **Trigger:** Runs automatically on every `push` to the main branch.
 * **Security:** API keys are injected at runtime via **GitHub Secrets**, ensuring no sensitive data is exposed in the repo.
-* **Status:** You can see the live build status via the "passing" badge at the top of this README.
+* **Status:** You can see the live build status via the "passing" badge above.
 
 ---
 
@@ -50,17 +46,17 @@ This project is not just a local script; it is integrated into a **Continuous In
 The automation script simulates a real user performing a complete project lifecycle:
 
 1.  **Project Initiation (POST Create Board):**
-    * *The "Why":* Simulates a user starting a new project. We capture the specific `boardId` to ensure subsequent tests only interact with *this* board, not existing ones.
+    * *The "Why":* Simulates a user starting a new project. We capture the specific `boardId` to ensure subsequent tests only interact with *this* board, not existing ones if any.
 2.  **Validation (GET Board):**
-    * *The "Why":* Verifies the board was actually created on the server and that default permission levels (Private) are correct.
+    * *The "Why":* Verifies the board was actually created on the server.
 3.  **Workflow Setup (POST Lists):**
-    * *The "Why":* We now introduce lists into this board. We create "To-Do" and "Done" columns to prepare for task management.
+    * *The "Why":* We now introduce lists into this board. We create a "To-Do" and a "Done" lists to prepare for task management.
 4.  **Task Creation (POST Card):**
-    * *The "Why":* Simulates a user adding a task ("Sign Up for Trello") to the "To-Do" column.
+    * *The "Why":* Simulates a user adding a task ("Sign Up for Trello") to the "To-Do" list.
 5.  **Task Completion (PUT Card):**
     * *The "Why":* Simulating a business logic, we move the card to the "Done" list and assert that its `idList` property has actually updated.
 6.  **Negative Testing (Invalid Auth & IDs):**
-    * *The "Why":* Verifies security and error handling. We ensure the API correctly rejects invalid tokens (401) and returns correct error codes (404) when trying to access resources that don't exist.
+    * *The "Why":* Verifies security and error handling. We ensure the API correctly rejects invalid tokens and returns correct error codes when trying to access resources that don't exist.
 7.  **State Violation Testing (The "Zombie Board"):**
     * *The "Why":* Tests the **lifecycle logic** of the application. We Archive (close) a board and then attempt to add a list to it. The test passes only if the API *rejects* the request, proving that closed boards are effectively locked.
 8.  **Cleanup (DELETE Board):**
@@ -74,7 +70,7 @@ The automation script simulates a real user performing a complete project lifecy
 
 ### Prerequisites
 * [Postman](https://www.postman.com/downloads/) installed.
-* A Trello Account (to generate API Key & Token).
+* A Trello Account (to generate API Key & Token. Insert these values into **trelloKey** and **trelloToken** respectively).
 
 ### Installation Steps
 1.  **Clone the Repository**
