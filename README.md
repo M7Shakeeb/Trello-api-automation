@@ -1,33 +1,43 @@
-# 🍌 Trello API Automation Framework
+# Trello API Automation Framework
 
 ![Postman](https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
 ![Trello](https://img.shields.io/badge/Trello-0052CC?style=for-the-badge&logo=trello&logoColor=white)
 [![Trello API Automated Tests](https://github.com/M7Shakeeb/Trello-api-automation/actions/workflows/main.yml/badge.svg)](https://github.com/M7Shakeeb/Trello-api-automation/actions/workflows/main.yml)
 
-## 📄 Project Overview
-This repository contains a robust automated test suite for the **Trello REST API**. It does more than just happy-path testing; this framework is designed to handle **dynamic data**, **stateful workflows**, and **deep negative test scenarios**.
-
+## Project Overview
+A comprehensive automated regression suite for the Trello REST API, designed to validate CRUD operations, state management, and edge cases using Postman and JavaScript. 
 It simulates a realistic user journey: creating a board, managing lists, moving cards, and performing cleanup. These are all fully automated using Postman and JavaScript.
 
-## 🧪 Key Automation Strategies
+**View Latest Results:**
+This project runs automatically on every code change. You can verify the latest regression status and access the generated HTML reports (click on the *latest run*, then click the *Artifacts* tab) by clicking the badge below:
+
+[![Trello API Automated Tests](https://github.com/M7Shakeeb/Trello-api-automation/actions/workflows/main.yml/badge.svg)](https://github.com/M7Shakeeb/Trello-api-automation/actions/workflows/main.yml)
+
+## Tech Stack
+* **Core:** Postman, JavaScript (ES6)
+* **CLI Runner:** Newman
+* **CI/CD:** GitHub Actions
+* **Reporting:** newman-reporter-htmlextra
+
+## Key Automation Strategies
 I made this collection while keeping in mind that I need to solve these common automation challenges:
 
-### 1. 🛡️ Dynamic Data & Collision Prevention
+### 1. Dynamic Data & Collision Prevention
 * **Problem:** Hardcoding board names (e.g., "Test Board") causes tests to fail if the board already exists from a previous run.
 * **Solution:** Implemented a JavaScript creation script using `Math.floor(Math.random())` to generate unique board names (e.g., `Trello Board 849`) for every single execution.
 
-### 2. 🔗 Intelligent Request Chaining
+### 2. Intelligent Request Chaining
 * **Problem:** APIs return different IDs every time a resource is created.
 * **Solution:** The framework captures dynamic IDs (`boardId`, `listId`, `cardId`) from JSON responses and stores them as **Collection Variables**. These variables are automatically passed to subsequent requests, creating a seamless E2E workflow.
 
-### 3. 📊 Visual Reporting
+### 3. Visual Reporting
 * **Problem:** CI/CD logs are hard to read for non-technical stakeholders.
 * **Solution:** Integrated `newman-reporter-htmlextra` to generate detailed, color-coded HTML dashboards for every test run (accessible via GitHub Artifacts).
 
 ---
 
-## 🤖 CI/CD Pipeline (GitHub Actions)
+## CI/CD Pipeline (GitHub Actions)
 This project is not just a local script; it is integrated into a **Continuous Integration** pipeline.
 * **Tool:** [Newman](https://www.npmjs.com/package/newman) (Postman CLI).
 * **Trigger:** Runs automatically on every `push` to the main branch.
@@ -36,7 +46,7 @@ This project is not just a local script; it is integrated into a **Continuous In
 
 ---
 
-## ⚙️ The "User Journey" (Test Scenario)
+## The "User Journey" (Test Scenario)
 The automation script simulates a real user performing a complete project lifecycle:
 
 1.  **Project Initiation (POST Create Board):**
@@ -58,7 +68,7 @@ The automation script simulates a real user performing a complete project lifecy
 
 ---
 
-## 🚀 How to Run Locally
+## How to Run Locally
 
 ### Option 1: Run Via Postman Collection Runner
 
@@ -111,13 +121,13 @@ If you prefer the terminal or want to generate the HTML report locally:
 
 ---
 
-## 📂 Project Structure
+## Project Structure
 ```text
 trello-api-automation/
 ├── .github/workflows/main.yml    # CI/CD & HTML Report Configuration
 ├── Trello API.postman_collection.json  # The Main Test Script
 └── README.md                     # Documentation
 ```
-## 👨‍💻 Author
+## Author
 **Shakeeb Mohammed**
 * QA & Test Automation Engineer
